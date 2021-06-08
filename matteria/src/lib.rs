@@ -1,5 +1,24 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 use sp_std::vec::Vec;
+
+/// Custom trait for ASCII charcodes operations
+pub trait ASCII {
+    fn to_ascii(&self) -> Result<u8, ()> {
+        Err(())
+    }
+}
+
+/// ASCII trait implementations
+impl ASCII for u8 {
+    /// Returns a Result after trying add 48 to a value
+    fn to_ascii(&self) -> Result<u8, ()> {
+        match &self.checked_add(48u8) {
+            Some(value) => Ok(*value as u8),
+            None => Err(()),
+        }
+    }
+}
+
 /// Utility function that converts an u8 integer into a ASCII byte by adding 48 to the provided number.
 ///
 /// The function uses checked_add which returns an Some(number) if everything is ok,
@@ -20,6 +39,11 @@ use sp_std::vec::Vec;
 /// | 56   | 38    | 00111000        | &#56;  | 8      | Eight          |
 /// | 57   | 39    | 00111001        | &#57;  | 9      | Nine           |
 ///
+
+#[deprecated(
+    since = "0.1.1",
+    note = "Please use the to_ascii() function from the ASCII trait"
+)]
 pub fn convert_u8_to_ascii(input: &u8) -> Result<u8, ()> {
     match input.checked_add(48u8) {
         Some(input) => Ok(input),
@@ -98,7 +122,7 @@ pub fn convert_to_vec_u8(input: &str) -> Vec<u8> {
 
 #[test]
 fn add_48_to_existing_number() {
-    assert_eq!(convert_u8_to_ascii(&4), Ok(52));
+    assert_eq!(4.to_ascii(), Ok(52));
 }
 #[test]
 fn prevent_integer_overflow() {
