@@ -1,0 +1,35 @@
+{
+	"name": "Substrate Node template",
+	"context": "..",
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"lldb.executable": "/usr/bin/lldb"
+	},
+	"extensions": [
+		"matklad.rust-analyzer",
+		"bungcip.better-toml",
+		"vadimcn.vscode-lldb",
+		"dtsvet.vscode-wasm",
+		"swellaby.vscode-rust-test-adapter",
+		"serayuzgur.crates",
+		"gruntfuggly.todo-tree",
+	],
+	"forwardPorts": [
+		3000,
+		9944
+	],
+	"preCreateCommand": "cargo build --release && cargo check",
+	// prevent node start at container boot up (It causes a nasty memory usage)
+	//"postStartCommand": "./target/release/node-template --dev --ws-external",
+	"menuActions": [
+		{
+			"id": "polkadotjs",
+			"label": "Open PolkadotJS Apps",
+			"type": "external-preview",
+			"args": [
+				"https://polkadot.js.org/apps/?rpc=wss%3A%2F%2F/$HOST/wss"
+			]
+		}
+	],
+	"image": "paritytech/substrate-playground-template-node-template:latest"
+}
