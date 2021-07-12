@@ -1,5 +1,12 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#[cfg(test)]
+mod tests;
+
+pub mod datatypes;
+pub mod traits;
+
 use sp_std::vec::Vec;
+
 /// Utility function that converts an u8 integer into a ASCII byte by adding 48 to the provided number.
 ///
 /// The function uses checked_add which returns an Some(number) if everything is ok,
@@ -20,6 +27,11 @@ use sp_std::vec::Vec;
 /// | 56   | 38    | 00111000        | &#56;  | 8      | Eight          |
 /// | 57   | 39    | 00111001        | &#57;  | 9      | Nine           |
 ///
+
+#[deprecated(
+    since = "0.1.1",
+    note = "Please use the to_ascii() function from the ASCII trait"
+)]
 pub fn convert_u8_to_ascii(input: &u8) -> Result<u8, ()> {
     match input.checked_add(48u8) {
         Some(input) => Ok(input),
@@ -94,13 +106,4 @@ impl Iterator for Digits {
 
 pub fn convert_to_vec_u8(input: &str) -> Vec<u8> {
     input.as_bytes().to_vec()
-}
-
-#[test]
-fn add_48_to_existing_number() {
-    assert_eq!(convert_u8_to_ascii(&4), Ok(52));
-}
-#[test]
-fn prevent_integer_overflow() {
-    assert_eq!(convert_u8_to_ascii(&250), Err(()));
 }
